@@ -42,11 +42,11 @@ class User(db.Model, UserMixin):
     review = db.relationship('Review', backref='author', lazy=True) #additional query in background
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}')"
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable=True, default='default.jpg')
     name = db.Column(db.String(20), unique=False, nullable=False)
     age = db.Column(db.Integer)
     cell_phone = db.Column(db.Integer)

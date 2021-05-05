@@ -27,7 +27,7 @@ def reviews():
   return render_template('index.html')
 
 '''
-Landing page
+Landing page  
 '''
 
 
@@ -39,8 +39,10 @@ Sign up page
 @app.route("/api/profile/registration", methods=[ 'POST'])
 def registration():
     if current_user.is_authenticated:
-        return 'username {user.username} created' #redirect(url_for('home'))
+        return 'Already Logged In' #redirect(url_for('home'))
     form = RegistrationForm()
+    form.validate_username(form.username)
+    form.validate_email(form.email)
     if form.validate_on_submit(): #need to change this to validate_on_submit...
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username = form.username.data, email = form.email.data, password = hashed_password)
@@ -48,11 +50,9 @@ def registration():
         db.session.commit()
 
         flash(f'Your Account has been created!', 'success')
-        return  'username {user.username} created' # redirect(url_for('login'))
-    else:
-        return  'username not created' # redirect(url_for('login'))
+        return  'User Created: \n username: {} \n email: {}'.format(user.username, user.email)  # redirect(url_for('login'))
     
-    return 'user already exists'
+    return 'Either Username or Email already exists'
     #return render_template('index.html', title='Registeration', form=form) # This needs to be updated
 
 
