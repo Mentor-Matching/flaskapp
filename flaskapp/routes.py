@@ -1,11 +1,9 @@
-from app import app
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm
 from flaskapp.models import User, Profile, Review
 from flask_login import login_user, current_user, logout_user, login_required
 import pymysql
-import dbServer, user, password, database from db.db_prod;
 
 
 '''
@@ -72,10 +70,10 @@ Testing endpoint
 
 @app.route('/dbTest', methods=['GET'])
 def dbTestConnection():
-  connection = pymysql.connect(host=dbServer,
-                              user=user,
-                              password=password,
-                              database=database,
+  connection = pymysql.connect(host="mm-mariadb-dev.mariadb.database.azure.com",
+                              user="mmDev@mm-mariadb-dev",
+                              password="MentorMatching!",
+                              database="MentorMatching",
                               cursorclass=pymysql.cursors.DictCursor)
 
   result = None
