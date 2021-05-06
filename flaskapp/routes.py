@@ -5,6 +5,7 @@ from flaskapp.forms import RegistrationForm, LoginForm
 from flaskapp.models import User, Profile, Review
 from flask_login import login_user, current_user, logout_user, login_required
 import pymysql
+import dbServer, user, password, database from db.db_prod;
 
 
 '''
@@ -14,34 +15,6 @@ Page rendering
 @app.route('/', methods=['GET'])
 def index():
   return render_template('index.html')
-
-@app.route('/dbTest', methods=['GET'])
-def dbTest():
-  connection = pymysql.connect(host='localhost',
-                              user='mmDev',
-                              password='MentorMatching!@',
-                              database='MentorMatching',
-                              cursorclass=pymysql.cursors.DictCursor)
-
-  result = None
-  with connection:
-      with connection.cursor() as cursor:
-          # Create a new record
-          cursor.execute("SELECT VERSION()")
-          # sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
-          # cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
-          result = cursor.fetchone()
-
-      # connection is not autocommit by default. So you must commit to save
-      # your changes.
-      # connection.commit()
-
-      # with connection.cursor() as cursor:
-          # Read a single record
-          # sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-          # cursor.execute(sql, ('webmaster@python.org',))
-          # result = cursor.fetc
-  return result
 
 @app.route('/sign-up', methods=['GET'])
 def signUp():
@@ -97,6 +70,20 @@ def api_reviews():
 Testing endpoint
 '''
 
+@app.route('/dbTest', methods=['GET'])
+def dbTestConnection():
+  connection = pymysql.connect(host=dbServer,
+                              user=user,
+                              password=password,
+                              database=database,
+                              cursorclass=pymysql.cursors.DictCursor)
+
+  result = None
+  with connection:
+      with connection.cursor() as cursor:
+          cursor.execute("SELECT VERSION()")
+          result = cursor.fetchone()
+  return result
 
 @app.route('/test', methods=['GET'])
 def test():

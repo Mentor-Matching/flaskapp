@@ -1,6 +1,7 @@
 
-dbServer = "mentor-matching-prod.database.windows.net"
-port = 1433
-user = "mmDev"
+dbServer = "mm-mariadb-prod.mariadb.database.azure.com"
+port = 3306
+user = "mmDev@mm-mariadb-prod"
 password = "MentorMatching!"
-database = "mm-prod"
+database = "MentorMatching"
+
