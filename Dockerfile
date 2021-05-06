@@ -15,6 +15,6 @@ RUN pip install -r requirements.txt
 ADD app.py ./app.py
 ADD flaskapp ./flaskapp
 
-EXPOSE 5000
+EXPOSE 80
 
 ENTRYPOINT [ "./init.sh" ]
