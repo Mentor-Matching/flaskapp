@@ -4,10 +4,12 @@ from flask import render_template, url_for, flash, redirect, request
 
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, InfoForm
-from flaskapp.models import User, Profile, Review
+from flaskapp.models import User_, Profile, Review
 from flask_login import login_user, current_user, logout_user, login_required
 import pymysql
 
+from flaskapp.service.user_service import save_new_user, get_user
+from flaskapp.service.matching_service import perform_matching
 
 
 
@@ -55,9 +57,6 @@ def landing():
 
 
 
-# @app.route('/api/recommendations?user_id=12389752179', methods=['GET'])
-# def reviews():
-#   return render_template('index.html')
 
 '''
 Sign up page
@@ -72,7 +71,7 @@ def registration():
     form.validate_email(form.email)
     if form.validate_on_submit(): #need to change this to validate_on_submit...
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username = form.username.data, email = form.email.data, password = hashed_password)
+        user = User_(username = form.username.data, email = form.email.data, password = hashed_password)
         db.session.add(user)
         db.session.commit()
 
@@ -104,7 +103,7 @@ def info():
       else:
         return render_template('info.html', title='Register', form=form)
       image_file = save_picture(form.picture.data)
-      user_id = User.query.order_by(User.id.desc()).first() #bring the last added user
+      user_id = User_.query.order_by(User_.id.desc()).first() #bring the last added user
       profile = Profile(image_file = form.image_file.data, name = form.name.data, age = form.age.data,
       cell_phone = form.cell_phone.data, school = form.school.data, user_id = user_id)
       db.session.add(profile)
@@ -122,12 +121,25 @@ Account Page
 def account():
   filename = 'profile_pics/profile.png'
   return render_template('account.html', title='Account', filename=filename)
+
+
 '''
 Recommendation page
 '''
-@app.route('/api/reviews', methods=['GET']) #Kooha
+@app.route('/api/recommendations', methods=['GET']) # TODO: Use session to avoid exposing userId/info
 def api_reviews():
+  user_id = request.args.get('user_id')
+  user = get_user(int(user_id))
+  if not user:
+    return "INVALID USER", 400
+
+  print("@@@@@@@@ USER TYPE: ", user.type)
+  perform_matching(user)
+
+
+
   return render_template('index.html')
+
 
 
 '''
@@ -140,7 +152,7 @@ def login():
         return render_template('logged_in.html', title='Logged_In')
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User_.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -188,7 +200,7 @@ def test2():
 
     
     hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    user = User(username = form.username.data, email = form.email.data, password = hashed_password)
+    user = User_(username = form.username.data, email = form.email.data, password = hashed_password)
     db.session.add(user)
     db.session.commit()
     return user.username

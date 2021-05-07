@@ -30,10 +30,10 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return User_.query.get(int(user_id))
 
 
-class User(db.Model, UserMixin):
+class User_(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -52,7 +52,7 @@ class Profile(db.Model):
     name = db.Column(db.String(20), unique=False, nullable=False)
     age = db.Column(db.Integer)
     school = db.Column(db.String(20))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_.id'), nullable = False)
 
     def __repr__(self):
         return f"Profile('{self.name}')"
@@ -62,7 +62,7 @@ class Review(db.Model):
     stars = db.Column(db.Integer)
     review_str = db.Column(db.Text)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_.id'), nullable = False)
     
     def __repr__(self):
         return f"Review('{self.id}')"
@@ -72,13 +72,13 @@ class Answer(db.Model):
     field = db.Column(db.String(20), nullable=False)
     major = db.Column(db.String(20), nullable=False)
     interest = db.Column(db.String(20), nullable=False)
-    user_id = User.query.order_by(User.id.desc()).first()
+    user_id = User_.query.order_by(User_.id.desc()).first()
     
     def __repr__(self):
         return f"Answer('{self.user_id}', '{self.field}','{self.major}','{self.interest}')"
 
 
-class Mentor(db.Model):    
+class Mentor_(db.Model):    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=False, nullable=False)
     school = db.Column(db.String(20))
