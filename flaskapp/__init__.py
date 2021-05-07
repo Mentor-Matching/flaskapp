@@ -34,15 +34,16 @@
 ################ PROD SETTINGS #################
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 app = Flask(__name__, static_url_path='')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://mmDev@mm-mariadb-prod:MentorMatching!@mm-mariadb-dev.mariadb.database.azure.com/MentorMatching'
+# TODO: Make this stuff environment variables
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://mmDev@mm-mariadb-dev:MentorMatching!@mm-mariadb-dev.mariadb.database.azure.com/MentorMatching'
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app) #kk
-login_manager = LoginManager(app) #kk
-login_manager.login_view = 'login' #kk
+# bcrypt = Bcrypt(app) #kk
+# login_manager = LoginManager(app) #kk
+# login_manager.login_view = 'login' #kk
 
 ################################################
 

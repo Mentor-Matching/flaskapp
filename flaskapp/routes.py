@@ -1,13 +1,14 @@
-import secrets
-import os
-from flask import render_template, url_for, flash, redirect, request
+# import secrets
+# import os
+# from flask import render_template, url_for, flash, redirect, request
 
-from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, InfoForm
-from flaskapp.models import User_, Profile, Review
-from flask_login import login_user, current_user, logout_user, login_required
+# from flaskapp import app, db, bcrypt
+# from flaskapp.forms import RegistrationForm, LoginForm, InfoForm
+# from flaskapp.models import User_, Profile, Review
+# from flask_login import login_user, current_user, logout_user, login_required
+
 import pymysql
-
+from flaskapp import app, db
 from flaskapp.service.user_service import save_new_user, get_user
 from flaskapp.service.matching_service import perform_matching
 
@@ -169,6 +170,13 @@ def logout():
 '''
 Testing endpoint
 '''
+
+@app.route('/createModelTables', methods=['GET'])
+def createTableBasedOnModel():
+  db.create_all()
+  db.session.commit()
+  return "SUCCESES??", 200
+
 
 @app.route('/dbTest', methods=['GET'])
 def dbTestConnection():
