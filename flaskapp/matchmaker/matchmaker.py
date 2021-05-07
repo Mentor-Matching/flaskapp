@@ -3,6 +3,15 @@
 import pandas as pd
 from random import randint
 import random
+import sys
+from flaskapp
+
+mentors = pd.read_csv('mentors.csv')
+
+
+
+sys.exit()
+# =============================================
 
 user = pd.read_csv('user_test.csv')
 mentor_pref = pd.read_csv('mentor_pref.csv')
@@ -80,4 +89,5 @@ def match_maker(mentor_pref, mentee_pref):
 
 
 
-match_maker(mentor_pref, mentee_pref)
+mentor_ids = match_maker(mentor_pref, mentee_pref)
+
