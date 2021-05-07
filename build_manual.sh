@@ -12,7 +12,6 @@ COMMIT_HASH=$(git rev-parse $1)
 CURRENT_HASH=$(git branch --show-current)
 
 
-# Stash uncommited changes
 git checkout $COMMIT_HASH
 if [ ! $? -eq 0 ]; then
     echo "ERROR: Failed to git stash and checkout to $COMMIT_HASH"
@@ -20,7 +19,6 @@ if [ ! $? -eq 0 ]; then
     exit 1
 fi
 
-# Build image and push to Azure ACR
 echo "\n========== Building and Pushing Image to ACR =========="
 az acr build --registry $ACR_NAME --image $SERVICE_NAME:$COMMIT_HASH .
 if [ ! $? -eq 0 ]; then

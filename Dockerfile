@@ -1,6 +1,10 @@
-FROM jazzdd/alpine-flask:python3
+FROM python:3.9.5-slim-buster
 
-WORKDIR /mm-backend
+RUN pip install --upgrade pip
+RUN apt-get update
+RUN apt-get install -y systemd bash curl
+
+WORKDIR /backend
 
 ADD scripts/init.sh ./init.sh
 RUN chmod +x ./init.sh
