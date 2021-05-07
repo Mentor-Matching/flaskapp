@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for a in mentor %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ a.name }}</a>
+              <small class="text-muted">{{ a.name }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ a.title }}</a></h2>
+            <p class="article-content">{{ a.job_content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
