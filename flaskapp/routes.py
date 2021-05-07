@@ -133,12 +133,10 @@ def api_reviews():
   if not user:
     return "INVALID USER", 400
 
-  print("@@@@@@@@ USER TYPE: ", user.type)
   perform_matching(user)
 
+  return user.as_dict(), 200
 
-
-  return render_template('index.html')
 
 
 
