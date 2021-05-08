@@ -1,6 +1,6 @@
 # import secrets
 # import os
-# from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request
 
 # from flaskapp import app, db, bcrypt
 # from flaskapp.forms import RegistrationForm, LoginForm, InfoForm
@@ -8,7 +8,7 @@
 # from flask_login import login_user, current_user, logout_user, login_required
 
 import pymysql
-from flask import request
+# from flask import request, render_template
 from flaskapp import app, db
 from flaskapp.model.user import USER_TYPE_MENTOR, USER_TYPE_MENTEE
 from flaskapp.service.user_service import save_new_user, get_user
