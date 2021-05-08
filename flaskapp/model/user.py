@@ -21,7 +21,7 @@ class User(db.Model):
     'polymorphic_identity': USER_TYPE_UNKNOWN
   }
 
-  def as_dict(self):
+  def to_dict(self):
     return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
   def __repr__(self):
@@ -43,6 +43,9 @@ class Mentor(User):
     'polymorphic_identity': USER_TYPE_MENTOR
   }
 
+  def to_dict(self):
+    return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 
 class Mentee(User):
   __tablename__ = 'mentee'
@@ -54,3 +57,6 @@ class Mentee(User):
   __mapper_args__ = {
     'polymorphic_identity': USER_TYPE_MENTEE
   }
+
+  def to_dict(self):
+    return {column.name: getattr(self, column.name) for column in self.__table__.columns}

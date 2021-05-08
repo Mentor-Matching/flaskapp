@@ -4,11 +4,13 @@ import pandas as pd
 from random import randint
 import random
 import sys
-from flaskapp
-
-mentors = pd.read_csv('mentors.csv')
 
 
+mentors = pd.read_csv('mentors_updated.csv')
+mentors_json = mentors.to_dict(orient='records')
+print(mentors_json[5])
+# for mentor in mentors_json:
+#     print(mentors)
 
 sys.exit()
 # =============================================

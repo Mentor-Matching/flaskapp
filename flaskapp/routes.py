@@ -8,9 +8,13 @@
 # from flask_login import login_user, current_user, logout_user, login_required
 
 import pymysql
+from flask import request
 from flaskapp import app, db
+from flaskapp.model.user import USER_TYPE_MENTOR, USER_TYPE_MENTEE
 from flaskapp.service.user_service import save_new_user, get_user
 from flaskapp.service.matching_service import perform_matching
+import pandas as pd
+import os
 
 
 
@@ -134,9 +138,9 @@ def api_reviews():
   if not user:
     return "INVALID USER", 400
 
-  perform_matching(user)
+  mentor_ids = perform_matching(user)
 
-  return user.as_dict(), 200
+  return mentor_ids, 200
 
 
 
@@ -171,11 +175,23 @@ def logout():
 Testing endpoint
 '''
 
-@app.route('/createModelTables', methods=['GET'])
+@app.route('/internal/createModelTables', methods=['GET'])
 def createTableBasedOnModel():
   db.create_all()
   db.session.commit()
   return "SUCCESES??", 200
+
+@app.route('/internal/mentors/upload', methods=['GET'])
+def bulkUploadMentors():
+  path = os.path.dirname(os.path.realpath(__file__))
+  mentors = pd.read_csv('{}/matchmaker/mentors_updated.csv'.format(path))
+  mentors_json = mentors.to_dict(orient='records')
+  with db.session.begin():
+    for mentor in mentors_json:
+      res, message = save_new_user(mentor, USER_TYPE_MENTOR, transaction=True)
+      print("USER {}: {}".format(mentor['name'], message))
+
+  return "Success!", 200
 
 
 @app.route('/dbTest', methods=['GET'])
@@ -192,6 +208,23 @@ def dbTestConnection():
           cursor.execute("SELECT VERSION()")
           result = cursor.fetchone()
   return result
+
+@app.route('/internal/mentee/', methods=['GET'])
+def createMentee():
+  user = {
+    "email": "helloworld@mentormatching.com",
+    "username": "mentormatchingdemo",
+    "password": "MentorMatchingDemo!",
+    "birthdate": "1/1/1994",
+    "cell_phone": 123123123,
+    "field": "['빅데이터', '인공지능']",
+    "major": "['컴퓨터학과']",
+    "interest": "['운동', '독서']"
+  }
+  res, message = save_new_user(user, USER_TYPE_MENTEE)
+  if not res:
+    return "ERROR: {}".format(message), 400
+  return "SUCCESS", 200
 
 
 @app.route('/test', methods=['GET'])
