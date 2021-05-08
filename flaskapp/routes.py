@@ -133,6 +133,7 @@ Recommendation page
 '''
 @app.route('/api/recommendations', methods=['GET']) # TODO: Use session to avoid exposing userId/info
 def api_reviews():
+  # TODO: user ID 110 is the ONLY Mentee right now.
   user_id = request.args.get('user_id')
   user = get_user(int(user_id))
   if not user:
@@ -140,7 +141,7 @@ def api_reviews():
 
   mentor_ids = perform_matching(user)
 
-  return mentor_ids, 200
+  return str(mentor_ids), 200
 
 
 
@@ -175,33 +176,34 @@ def logout():
 Testing endpoint
 '''
 
+# This endpoint will create all DB tables for which models exist
 @app.route('/internal/createModelTables', methods=['GET'])
 def createTableBasedOnModel():
   db.create_all()
   db.session.commit()
   return "SUCCESES??", 200
 
+# This will bulk upload the csv (local) file into DB
 @app.route('/internal/mentors/upload', methods=['GET'])
 def bulkUploadMentors():
   path = os.path.dirname(os.path.realpath(__file__))
   mentors = pd.read_csv('{}/matchmaker/mentors_updated.csv'.format(path))
-  mentors_json = mentors.to_dict(orient='records')
+  mentors_dict = mentors.to_dict(orient='records')
   with db.session.begin():
-    for mentor in mentors_json:
+    for mentor in mentors_dict:
       res, message = save_new_user(mentor, USER_TYPE_MENTOR, transaction=True)
       print("USER {}: {}".format(mentor['name'], message))
 
   return "Success!", 200
 
-
-@app.route('/dbTest', methods=['GET'])
+# Test DB connection
+@app.route('/internal/dbTest', methods=['GET'])
 def dbTestConnection():
   connection = pymysql.connect(host="mm-mariadb-dev.mariadb.database.azure.com",
                               user="mmDev@mm-mariadb-dev",
                               password="MentorMatching!",
                               database="MentorMatching",
                               cursorclass=pymysql.cursors.DictCursor)
-
   result = None
   with connection:
       with connection.cursor() as cursor:
@@ -209,11 +211,12 @@ def dbTestConnection():
           result = cursor.fetchone()
   return result
 
+# Manually create mentee by modifying below and making a request to this endpoint
 @app.route('/internal/mentee/', methods=['GET'])
 def createMentee():
   user = {
-    "email": "helloworld@mentormatching.com",
-    "username": "mentormatchingdemo",
+    "email": "helloworld1@mentormatching.com",
+    "username": "mentormatchingdemo1",
     "password": "MentorMatchingDemo!",
     "birthdate": "1/1/1994",
     "cell_phone": 123123123,
@@ -231,25 +234,7 @@ def createMentee():
 def test():
   return 'it works!'
 
-@app.route('/test2', methods=['POST'])
-def test2():
-  # return 'it works!'
-  form = RegistrationForm()
-  if form.submit():
-
-    
-    hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    user = User_(username = form.username.data, email = form.email.data, password = hashed_password)
-    db.session.add(user)
-    db.session.commit()
-    return user.username
-  
-  return 'No Return'
 
 '''
 Page Not Found
 '''
-
-# @app.errorhandler(404)
-# def pageNotFound(e):
-#   return render_template('index.html')

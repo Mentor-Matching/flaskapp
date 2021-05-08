@@ -3,17 +3,7 @@
 import pandas as pd
 from random import randint
 import random
-import sys
 
-
-mentors = pd.read_csv('mentors_updated.csv')
-mentors_json = mentors.to_dict(orient='records')
-print(mentors_json[5])
-# for mentor in mentors_json:
-#     print(mentors)
-
-sys.exit()
-# =============================================
 
 user = pd.read_csv('user_test.csv')
 mentor_pref = pd.read_csv('mentor_pref.csv')
@@ -23,14 +13,14 @@ mentee_pref = pd.read_csv('mentee_pref.csv')
 def match_score(mentor_pref, mentee_pref):
     
     # pulling mentee 1's answer
-    mentee_a1 = mentee_pref.loc[0,'question1']
-    mentee_a2 = mentee_pref.loc[0,'question2']
-    mentee_a3 = mentee_pref.loc[0,'question3']
+    mentee_a1 = mentee_pref.loc[0,'field']
+    mentee_a2 = mentee_pref.loc[0,'major']
+    mentee_a3 = mentee_pref.loc[0,'interest']
     
     mentor_pref['score']=0
     
     answers = [mentee_a1, mentee_a2, mentee_a3]
-    questions = ['question1','question2','question3']
+    questions = ['field','major','interest']
     
     i=0
     

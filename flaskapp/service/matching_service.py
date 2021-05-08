@@ -1,17 +1,18 @@
 import pandas as pd
+import random
 
 from .user_service import get_all_mentors
 
 def match_score(mentor_pref, mentee_pref):
     # pulling mentee 1's answer
-    mentee_a1 = mentee_pref.loc[0,'question1']
-    mentee_a2 = mentee_pref.loc[0,'question2']
-    mentee_a3 = mentee_pref.loc[0,'question3']
+    mentee_a1 = mentee_pref.loc[0,'field']
+    mentee_a2 = mentee_pref.loc[0,'major']
+    mentee_a3 = mentee_pref.loc[0,'interest']
     
     mentor_pref['score']=0
     
     answers = [mentee_a1, mentee_a2, mentee_a3]
-    questions = ['question1','question2','question3']
+    questions = ['field','major','interest']
     
     i=0
     for answer in answers:
@@ -59,10 +60,7 @@ def perform_matching(mentee):
   mentors_df = pd.DataFrame(mentor_dicts)
   mentees_df = pd.DataFrame([mentee.to_dict()])
 
-  print("@@@@@@@@ PERFORM MATCHING")
-  print("Mentee: ")
   print(mentees_df)
-  print("Mentors: ")
   print(mentors_df)
 
   ###### MAGIC STUFF #######
