@@ -38,6 +38,20 @@ def calendar():
 def reviews():
   return render_template('index.html')
 
+@app.route('/sign-up/basic-info', methods=['GET'])
+def basicInfo():
+  return render_template('index.html')
+@app.route('/sign-up/interests', methods=['GET'])
+def interests():
+  return render_template('index.html')
+@app.route('/profile/mentee', methods=['GET'])
+def menteeProfile():
+  return render_template('index.html')
+
+
+
+
+  
 '''
 Landing page  
 '''
