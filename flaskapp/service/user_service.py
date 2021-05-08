@@ -32,7 +32,9 @@ def save_new_user(data, userType, transaction=False):
       registered_on=datetime.datetime.utcnow(),
       field=data['field'],
       major=data['major'],
-      interest=data['interest']
+      interest=data['interest'],
+      hobby=data['hobby'],
+      project=data['project']
     )
   elif userType == USER_TYPE_MENTOR:
     if not data['job_title']:

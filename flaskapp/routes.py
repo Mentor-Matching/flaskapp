@@ -1,6 +1,6 @@
 # import secrets
 # import os
-# from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request
 
 # from flaskapp import app, db, bcrypt
 # from flaskapp.forms import RegistrationForm, LoginForm, InfoForm
@@ -158,8 +158,6 @@ def api_reviews():
   return str(mentor_ids), 200
 
 
-
-
 '''
 Login Page: Only For Development Purpose
 '''
@@ -229,14 +227,16 @@ def dbTestConnection():
 @app.route('/internal/mentee/', methods=['GET'])
 def createMentee():
   user = {
-    "email": "helloworld1@mentormatching.com",
-    "username": "mentormatchingdemo1",
+    "email": "koohakwo126@mentormatching.com",
+    "username": "koohakwo",
     "password": "MentorMatchingDemo!",
-    "birthdate": "1/1/1994",
-    "cell_phone": 123123123,
-    "field": "['빅데이터', '인공지능']",
-    "major": "['컴퓨터학과']",
-    "interest": "['운동', '독서']"
+    "birthdate": "4/24/1993",
+    "cell_phone": 2067797250,
+    "field": "['방송', '마케팅','디자인']",
+    "major": "[''공연예술과', '공업디자인']",
+    "interest": "['우주', '게임','미술']",
+    "hobby" : "저는 거의 매일 영화를 봅니다. 유투브 자주 보는것 같습니다. 여러 매체의 영상들을 작업하는 것을 좋아합니다",
+    "project": "저는 학교 프로젝트로 고등학생들을 여러 문제점들을 파해치는 다큐멘터리를 만들고 있습니다. 전에도 몇번 짧은 영상들을 만들어 보았지만 이렇게 긴 영상을 만드는 것은 처음입니다. 이 부분을 도와주세요."
   }
   res, message = save_new_user(user, USER_TYPE_MENTEE)
   if not res:

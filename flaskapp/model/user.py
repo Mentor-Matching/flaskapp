@@ -53,6 +53,8 @@ class Mentee(User):
   field = db.Column(db.String(20), nullable=False)
   major = db.Column(db.String(20), nullable=False)
   interest = db.Column(db.String(20), nullable=False)
+  hobby = db.Column(db.String(2000))
+  project = db.Column(db.String(2000))
 
   __mapper_args__ = {
     'polymorphic_identity': USER_TYPE_MENTEE
