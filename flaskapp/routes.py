@@ -80,65 +80,65 @@ def landing():
 Sign up page
 '''
 
-@app.route("/api/profile/registration", methods=[ 'GET','POST'])
-def registration():
-    if current_user.is_authenticated:
-        return 'Already Logged In' #redirect(url_for('home'))
-    form = RegistrationForm()
-    form.validate_username(form.username)
-    form.validate_email(form.email)
-    if form.validate_on_submit(): #need to change this to validate_on_submit...
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User_(username = form.username.data, email = form.email.data, password = hashed_password)
-        db.session.add(user)
-        db.session.commit()
+# @app.route("/api/profile/registration", methods=[ 'GET','POST'])
+# def registration():
+#     if current_user.is_authenticated:
+#         return 'Already Logged In' #redirect(url_for('home'))
+#     form = RegistrationForm()
+#     form.validate_username(form.username)
+#     form.validate_email(form.email)
+#     if form.validate_on_submit(): #need to change this to validate_on_submit...
+#         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+#         user = User_(username = form.username.data, email = form.email.data, password = hashed_password)
+#         db.session.add(user)
+#         db.session.commit()
 
-        flash(f'Your Account has been created!', 'success')
-        return redirect(url_for('info'))
+#         flash(f'Your Account has been created!', 'success')
+#         return redirect(url_for('info'))
     
-    return render_template('register.html', title='Register', form=form)
+#     return render_template('register.html', title='Register', form=form)
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+# def save_picture(form_picture):
+#     random_hex = secrets.token_hex(8)
+#     _, f_ext = os.path.splitext(form_picture.filename)
+#     picture_fn = random_hex + f_ext
+#     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
 
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
+#     output_size = (125, 125)
+#     i = Image.open(form_picture)
+#     i.thumbnail(output_size)
+#     i.save(picture_path)
 
-    return picture_fn
+#     return picture_fn
 
-@app.route("/api/profile/info", methods=[ 'GET','POST'])
-def info():
+# @app.route("/api/profile/info", methods=[ 'GET','POST'])
+# def info():
     
-    form = InfoForm()
-    if form.submit(): #need to change this to validate_on_submit...
-      if form.picture.data:
-        a=1
-      else:
-        return render_template('info.html', title='Register', form=form)
-      image_file = save_picture(form.picture.data)
-      user_id = User_.query.order_by(User_.id.desc()).first() #bring the last added user
-      profile = Profile(image_file = form.image_file.data, name = form.name.data, age = form.age.data,
-      cell_phone = form.cell_phone.data, school = form.school.data, user_id = user_id)
-      db.session.add(profile)
-      db.session.commit()
+#     form = InfoForm()
+#     if form.submit(): #need to change this to validate_on_submit...
+#       if form.picture.data:
+#         a=1
+#       else:
+#         return render_template('info.html', title='Register', form=form)
+#       image_file = save_picture(form.picture.data)
+#       user_id = User_.query.order_by(User_.id.desc()).first() #bring the last added user
+#       profile = Profile(image_file = form.image_file.data, name = form.name.data, age = form.age.data,
+#       cell_phone = form.cell_phone.data, school = form.school.data, user_id = user_id)
+#       db.session.add(profile)
+#       db.session.commit()
 
-      return redirect(url_for('login'))
+#       return redirect(url_for('login'))
   
-    return render_template('info.html', title='Register', form=form)
+#     return render_template('info.html', title='Register', form=form)
 
-'''
-Account Page
-'''
+# '''
+# Account Page
+# '''
 
-@app.route("/account", methods=['GET'])
-def account():
-  filename = 'profile_pics/profile.png'
-  return render_template('account.html', title='Account', filename=filename)
+# @app.route("/account", methods=['GET'])
+# def account():
+#   filename = 'profile_pics/profile.png'
+#   return render_template('account.html', title='Account', filename=filename)
 
 
 '''
@@ -161,25 +161,25 @@ def api_reviews():
 Login Page: Only For Development Purpose
 '''
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return render_template('logged_in.html', title='Logged_In')
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User_.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(url_for('landing')) 
-        else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
-    return  render_template('login.html', title='Login', form=form)
+# @app.route("/login", methods=['GET', 'POST'])
+# def login():
+#     if current_user.is_authenticated:
+#         return render_template('logged_in.html', title='Logged_In')
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User_.query.filter_by(email=form.email.data).first()
+#         if user and bcrypt.check_password_hash(user.password, form.password.data):
+#             login_user(user, remember=form.remember.data)
+#             next_page = request.args.get('next')
+#             return redirect(url_for('landing')) 
+#         else:
+#             flash('Login Unsuccessful. Please check email and password', 'danger')
+#     return  render_template('login.html', title='Login', form=form)
 
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('login')) 
+# @app.route("/logout")
+# def logout():
+#     logout_user()
+#     return redirect(url_for('login')) 
 
 
 
