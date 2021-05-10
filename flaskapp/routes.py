@@ -7,7 +7,6 @@ from flask import render_template, url_for, flash, redirect, request
 # from flaskapp.models import User_, Profile, Review
 # from flask_login import login_user, current_user, logout_user, login_required
 
-import pymysql
 from flask import request
 from flaskapp import app, db
 from flaskapp.model.user import USER_TYPE_MENTOR, USER_TYPE_MENTEE
@@ -208,20 +207,6 @@ def bulkUploadMentors():
 
   return "Success!", 200
 
-# Test DB connection
-@app.route('/internal/dbTest', methods=['GET'])
-def dbTestConnection():
-  connection = pymysql.connect(host="mm-mariadb-dev.mariadb.database.azure.com",
-                              user="mmDev@mm-mariadb-dev",
-                              password="MentorMatching!",
-                              database="MentorMatching",
-                              cursorclass=pymysql.cursors.DictCursor)
-  result = None
-  with connection:
-      with connection.cursor() as cursor:
-          cursor.execute("SELECT VERSION()")
-          result = cursor.fetchone()
-  return result
 
 # Manually create mentee by modifying below and making a request to this endpoint
 @app.route('/internal/mentee/', methods=['GET'])
