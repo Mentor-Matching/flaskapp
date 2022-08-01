@@ -1,6 +1,6 @@
 # Mentor Matching Recommendation Engine
 
-Note: We decided to separate out the recomendation engine from our static asset serving app. Please inquire @kooma93 for any questions regarding frontend.
+Note: We decided to separate out the recomendation engine from our static asset serving app. Please inquire @GoKooma for any questions regarding frontend.
 
 ## Table of contents
 
